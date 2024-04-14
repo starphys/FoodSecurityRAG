@@ -25,4 +25,4 @@ def message():
     return jsonify(response=response)
 
 
-app.run()
+app.run(debug=True)
