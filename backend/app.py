@@ -1,5 +1,8 @@
 from flask import Flask, request, jsonify
 
+from dotenv import load_dotenv
+load_dotenv()
+
 from RAG import RAG
 
 rag = RAG('SOFI-2023.txt')
