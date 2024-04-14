@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -11,9 +11,18 @@ function Chat () {
   const [messages, setMessages] = useState([{ content: 'How can I help you today?', role: 'assistant' }])
   const [input, setInput] = useState('')
 
+  const scrollRef = useRef(null)
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat window
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [messages])
+
   useEffect(() => {
     if (messages[messages.length - 1].role !== 'user') {
-      return;
+      return
     }
     fetch('/api/message', {
       method: 'POST',
@@ -40,12 +49,12 @@ function Chat () {
 
   const sendMessage = (e) => {
     e.preventDefault()
-    console.log(messages);
+    console.log(messages)
     if (input.trim()) {
       setMessages(prevMessages => [
         ...prevMessages,
         {content: input, role: 'user'}
-      ]);
+      ])
 
       setInput('')
     }
@@ -57,10 +66,14 @@ function Chat () {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      height: '100vh'
+      height: '100vh',
+      width:'100vw'
     }}
     >
-      <Paper elevation={3} sx={{ width: 300, height: 400, overflow: 'auto', backgroundColor: 'lightgrey' }}>
+        <Box sx={{ width: 370, height: 40, backgroundColor: '#404040', display: 'flex', justifyContent: 'center', alignContent:'center', paddingTop:2 }}>
+          <Typography color='white'>Food Security and Nutrition GPT</Typography>
+        </Box>
+      <Paper ref={scrollRef} elevation={3} sx={{ width: 370, height: 400, overflow: 'auto', backgroundColor: 'lightgrey' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
           {messages.map((message, index) => (
             <Box
