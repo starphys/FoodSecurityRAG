@@ -18,8 +18,6 @@ def hello_world():
 def message():
     message_history = request.json['message_history']
 
-    rag.generate_answer(messages=message_history)
-
     response = rag.generate_answer(message_history)
 
     return jsonify(response=response)
