@@ -17,4 +17,4 @@ def message():
     return jsonify(response=f"LLM response to [{message_history[-1]['content']}] here")
 
 
-app.run()
+app.run(debug=True)
