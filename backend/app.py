@@ -8,7 +8,7 @@ def hello_world():
     return 'Hello World!'
 
 
-@app.route('api/message', methods=['POST'])
+@app.route('/api/message', methods=['POST'])
 def message():
     prompt = request.json['prompt']
 

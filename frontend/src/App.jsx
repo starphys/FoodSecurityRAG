@@ -5,7 +5,7 @@ const theme = createTheme({
   // Customize your theme here
 })
 
-function App() {
+function App () {
   return (
     <ThemeProvider theme={theme}>
       <Chat />
