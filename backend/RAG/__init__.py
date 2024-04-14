@@ -32,14 +32,15 @@ class RAG:
         retrieved_chunks = self.retrieve_context(messages[-1]["content"])
         context = ' '.join(retrieved_chunks)
         messages.append({"role":"system", "content":context})
-        # messages.append({"role":"system", "content":"Please provide a short paraphrased answer as well as a supporting quote from SOFI-2023."})
+        messages.append({"role":"system", "content":"Please provide a short paraphrased answer as well as a supporting quote from SOFI-2023."})
 
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-3.5-turbo",
                 temperature=0,
                 messages=messages
             )
-            return response.choices[0].message
+            return {"content":response.choices[0].message.content, "role":response.choices[0].message.role}
         except Exception as e:
-            return str(e)
+            print("Exception", e)
+            return {"content":"OpenAI threw an error","role":"assistant"}
