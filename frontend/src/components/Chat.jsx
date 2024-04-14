@@ -26,7 +26,7 @@ function Chat () {
       .then(data => {
         setMessages(prevMessages => [
           ...prevMessages,
-          { content: data.response, role: 'assistant' }
+          data.response
         ])
       })
       .catch(error => {

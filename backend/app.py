@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+
 from RAG import RAG
 
+rag = RAG('SOFI-2023.txt')
+
 app = Flask(__name__)
-rag = RAG("SOFI-2023.txt")
 
 @app.route('/')
 def hello_world():
@@ -15,7 +17,9 @@ def message():
 
     rag.generate_answer(messages=message_history)
 
-    return jsonify(response=f"LLM response to [{message_history[-1]['content']}] here")
+    response = rag.generate_answer(message_history)
+
+    return jsonify(response=response)
 
 
 app.run()

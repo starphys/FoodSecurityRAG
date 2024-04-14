@@ -1,4 +1,4 @@
 .idea
 Pipfile
 Pipfile.lock
-config.json
+RAG/config.json
