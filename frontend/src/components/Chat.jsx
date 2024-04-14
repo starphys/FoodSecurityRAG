@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
@@ -53,7 +52,7 @@ function Chat () {
     if (input.trim()) {
       setMessages(prevMessages => [
         ...prevMessages,
-        {content: input, role: 'user'}
+        { content: input, role: 'user' }
       ])
 
       setInput('')
@@ -67,44 +66,80 @@ function Chat () {
       justifyContent: 'center',
       alignItems: 'center',
       height: '100vh',
-      width:'100vw'
+      width: '100vw'
     }}
     >
-        <Box sx={{ width: 370, height: 40, backgroundColor: '#404040', display: 'flex', justifyContent: 'center', alignContent:'center', paddingTop:2 }}>
+      <Box sx={{
+        width: 371,
+        backgroundColor: 'lightgrey',
+        borderRadius: 2,
+        overflow: 'hidden',
+        boxShadow: 3
+      }}
+      >
+        <Box sx={{
+          width: 370,
+          height: 40,
+          backgroundColor: '#404040',
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'center',
+          paddingTop: 2
+        }}
+        >
           <Typography color='white'>Food Security and Nutrition GPT</Typography>
         </Box>
-      <Paper ref={scrollRef} elevation={3} sx={{ width: 370, height: 400, overflow: 'auto', backgroundColor: 'lightgrey' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
-          {messages.map((message, index) => (
-            <Box
-              key={index}
-              sx={{
-                backgroundColor: message.role === 'user' ? 'white' : 'blue',
-                color: message.role === 'user' ? 'black' : 'white',
-                padding: 1,
-                borderRadius: 1,
-                marginBottom: 1,
-                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
-                maxWidth: '70%'
-              }}
-            >
-              <Typography variant='body1'>{message.content}</Typography>
-            </Box>
-          ))}
+        <Box
+          ref={scrollRef}
+          sx={{
+            width: 370,
+            height: 400,
+            overflow: 'auto',
+            backgroundColor: 'lightgrey'
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'column', padding: 1 }}>
+            {messages.map((message, index) => (
+              <Box
+                key={index}
+                sx={{
+                  backgroundColor: message.role === 'user' ? 'white' : 'blue',
+                  color: message.role === 'user' ? 'black' : 'white',
+                  padding: 1,
+                  borderRadius: 1,
+                  marginBottom: 1,
+                  alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+                  maxWidth: '70%'
+                }}
+              >
+                <Typography variant='body1'>{message.content}</Typography>
+              </Box>
+            ))}
+          </Box>
         </Box>
-      </Paper>
-      <Box component='form' onSubmit={sendMessage} sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
-        <TextField
-          fullWidth
-          variant='outlined'
-          placeholder='Type your message...'
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          sx={{ width: 300, marginRight: 1 }}
-        />
-        <Button variant='contained' color='primary' type='submit'>
-          <SendIcon />
-        </Button>
+        <Box
+          component='form'
+          onSubmit={sendMessage}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: 2,
+            backgroundColor: 'white',
+            padding: 1
+          }}
+        >
+          <TextField
+            fullWidth
+            variant='outlined'
+            placeholder='Type your message...'
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            sx={{ width: 300, marginRight: 1 }}
+          />
+          <Button variant='contained' color='primary' type='submit'>
+            <SendIcon />
+          </Button>
+        </Box>
       </Box>
     </Box>
   )
