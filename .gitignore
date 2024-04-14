@@ -1,6 +1,6 @@
 **venv
 **node_modules
-**config.json
+**.env
 **.pyc
 
 # Logs
