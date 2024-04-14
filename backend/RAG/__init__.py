@@ -4,14 +4,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 import json
-import openai
+from openai import OpenAI
 
 class RAG:
     def __init__(self, file_name):
         # Load the RAG model components
-        with open('RAG/config.json', 'r') as config_file:
-            config = json.load(config_file)
-        openai.api_key = config.get('openai_api_key')
+        self.client = OpenAI()
         # NLTK resource download
         nltk.download('punkt')
         self.vectorizer = TfidfVectorizer()
@@ -34,8 +32,10 @@ class RAG:
         retrieved_chunks = self.retrieve_context(messages[-1]["content"])
         context = ' '.join(retrieved_chunks)
         messages.append({"role":"system", "content":context})
+        # messages.append({"role":"system", "content":"Please provide a short paraphrased answer as well as a supporting quote from SOFI-2023."})
+
         try:
-            response = openai.ChatCompletion.create(
+            response = self.client.chat.completions.create(
                 model="gpt-4",
                 temperature=0,
                 messages=messages
