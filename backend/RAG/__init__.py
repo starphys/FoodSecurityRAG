@@ -30,14 +30,14 @@ class RAG:
 
     def generate_answer(self, messages):
         retrieved_chunks = self.retrieve_context(messages[-1]["content"])
-        context = ' '.join(retrieved_chunks)
+        context = '\n'.join(retrieved_chunks)
         messages.append({"role":"system", "content":context})
-        messages.append({"role":"system", "content":"Please provide a short paraphrased answer as well as a supporting quote from SOFI-2023."})
+        messages.append({"role":"system", "content":"Please provide a short paraphrased answer to the user's response as well as a supporting quote from the above snippets of SOFI-2023."})
 
         try:
             response = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                temperature=0,
+                temperature=0.5,
                 messages=messages
             )
             return {"content":response.choices[0].message.content, "role":response.choices[0].message.role}
