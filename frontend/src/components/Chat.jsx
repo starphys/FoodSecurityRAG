@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -8,35 +8,44 @@ import Typography from '@mui/material/Typography'
 
 import SendIcon from '@mui/icons-material/Send'
 function Chat () {
-  const [messages, setMessages] = useState([{ text: 'How can I help you today?', sender: 'rag' }])
+  const [messages, setMessages] = useState([{ content: 'How can I help you today?', role: 'assistant' }])
   const [input, setInput] = useState('')
+
+  useEffect(() => {
+    if (messages[messages.length - 1].role !== 'user') {
+      return;
+    }
+    fetch('/api/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message_history: messages })
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { content: data.response, role: 'assistant' }
+        ])
+      })
+      .catch(error => {
+        console.error('Error sending message:', error)
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { content: 'Server failed to respond', role: 'assistant' }
+        ])
+      })
+  }, [messages])
 
   const sendMessage = (e) => {
     e.preventDefault()
+    console.log(messages);
     if (input.trim()) {
-      fetch('/api/message', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ prompt: input })
-      })
-        .then(response => response.json())
-        .then(data => {
-          setMessages(prevMessages => [
-            ...prevMessages,
-            { text: input, sender: 'user' },
-            { text: data.response, sender: 'rag' }
-          ])
-        })
-        .catch(error => {
-          console.error('Error sending message:', error)
-          setMessages(prevMessages => [
-            ...prevMessages,
-            { text: input, sender: 'user' },
-            { text: 'Server failed to respond', sender: 'rag' }
-          ])
-        })
+      setMessages(prevMessages => [
+        ...prevMessages,
+        {content: input, role: 'user'}
+      ]);
 
       setInput('')
     }
@@ -57,16 +66,16 @@ function Chat () {
             <Box
               key={index}
               sx={{
-                backgroundColor: message.sender === 'user' ? 'white' : 'blue',
-                color: message.sender === 'user' ? 'black' : 'white',
+                backgroundColor: message.role === 'user' ? 'white' : 'blue',
+                color: message.role === 'user' ? 'black' : 'white',
                 padding: 1,
                 borderRadius: 1,
                 marginBottom: 1,
-                alignSelf: message.sender === 'user' ? 'flex-end' : 'flex-start',
+                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
                 maxWidth: '70%'
               }}
             >
-              <Typography variant='body1'>{message.text}</Typography>
+              <Typography variant='body1'>{message.content}</Typography>
             </Box>
           ))}
         </Box>

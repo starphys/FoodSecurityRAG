@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -10,9 +12,9 @@ def hello_world():
 
 @app.route('/api/message', methods=['POST'])
 def message():
-    prompt = request.json['prompt']
+    message_history = request.json['message_history']
 
-    return jsonify(response=f"LLM response to [{prompt}] here")
+    return jsonify(response=f"LLM response to [{message_history[-1]['content']}] here")
 
 
 app.run()
